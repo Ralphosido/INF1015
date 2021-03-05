@@ -231,6 +231,19 @@ void afficherActeur(const Acteur& acteur)
 
 //TODO: Une fonction pour afficher un film avec tous ces acteurs (en utilisant la fonction afficherActeur ci-dessus).
 
+
+
+ostream& operator<<(ostream& o, const Film& film)
+{
+	o << "Titre: " << film.titre << " " << "Réalisateur: " << film.realisateur << " Année: "
+		<< film.anneeSortie << " " << "Recette: " << film.recette << "M$" << "Acteurs: " << " ";
+	for (auto&& acteur : film.acteurs.enSpan())
+	{
+		afficherActeur(*acteur);
+	}
+
+};
+
 void afficherFilm(const Film& film)
 {
 	cout << "Titre: " << film.titre << endl;
@@ -244,7 +257,7 @@ void afficherFilm(const Film& film)
 	}
 }
 
-void afficherListeFilms(const ListeFilms& listeFilms)
+/*void afficherListeFilms(const ListeFilms& listeFilms)
 {
 	static const string ligneDeSeparation = "=========================================";
 	cout << ligneDeSeparation << endl;
@@ -253,7 +266,7 @@ void afficherListeFilms(const ListeFilms& listeFilms)
 		afficherFilm(*film);
 		cout << ligneDeSeparation;
 	}
-}
+}*/
 
 
 /*void afficherFilmographieActeur(const ListeFilms& listeFilms, const string& nomActeur)

@@ -244,7 +244,7 @@ ostream& operator<<(ostream& o, const Film& film)
 
 };
 
-void afficherFilm(const Film& film)
+/*void afficherFilm(const Film& film)
 {
 	cout << "Titre: " << film.titre << endl;
 	cout << "  " << "Réalisateur: " << film.realisateur << " Année: " << film.anneeSortie << " " << endl;
@@ -255,7 +255,7 @@ void afficherFilm(const Film& film)
 	{
 		afficherActeur(*acteur);
 	}
-}
+}}*/
 
 /*void afficherListeFilms(const ListeFilms& listeFilms)
 {

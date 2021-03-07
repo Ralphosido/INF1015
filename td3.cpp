@@ -143,8 +143,6 @@ Film* lireFilm(istream& fichier, ListeFilms& listeFilms)
 
 	ListeActeurs acteurs(nElements);
 	film->acteurs = move(acteurs);
-	//film->acteurs.setnElements(nElements);
-	//film->acteurs.setCapacite(nElements);
 
 	cout << "Création Film " << film->titre << endl;
 	for (shared_ptr<Acteur>& acteur : film->acteurs.enSpan()) {
@@ -152,22 +150,6 @@ Film* lireFilm(istream& fichier, ListeFilms& listeFilms)
 		//acteur->joueDans.ajouterFilm(film);
 	}
 
-	
-
-	/*ListeActeurs acteurs(nElements);
-	//film->acteurs = move(acteurs);
-	film->acteurs.setnElements(nElements);
-	film->acteurs.setCapacite(nElements);
-
-	cout << "Création Film " << film->titre << endl;
-	for (shared_ptr<Acteur>& acteur : acteurs.enSpan()) {
-		acteur = lireActeur(fichier, listeFilms);
-		//acteur->joueDans.ajouterFilm(film);
-	}
-
-	film->acteurs.setCapacite(nElements);
-	film->acteurs.setElements(acteurs.getElements());
-	//setElement(shared_ptr<T> nouveauElement, int pos)*/
 	return film;
 	 
 }
@@ -201,13 +183,12 @@ ListeFilms creerListe(string nomFichier)
 
 void detruireFilm(Film* film)
 {
-	for (shared_ptr<Acteur> acteur : film->acteurs.enSpan())
+	/*for (shared_ptr<Acteur> acteur : film->acteurs.enSpan())
 	{
-		//acteur->joueDans.enleverFilm(film);
-		//cout << acteur.use_count() << acteur->nom << endl;
-		//if (acteur.use_count() == 0)
-			//cout << "Destruction Acteur " << acteur->nom << endl;
-	}
+		acteur->joueDans.enleverFilm(film);
+		if (!joueEncore(acteur))
+			detruireActeur(acteur);
+	}*/
 	cout << "Destruction Film " << film->titre << endl;
 	delete film;
 }

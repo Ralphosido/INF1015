@@ -81,16 +81,8 @@ private:
 			auto elements = elements_.get();
 			return span(elements, nElements_);
 		}
-		/*span<Acteur*> enSpan() const {
-			auto elements = elements_.get();
-			return span(elements, nElements_);
-		}*/
-		//int size() const { return nElements_; }
+		
 		unique_ptr<shared_ptr<T>[]> getElements() { return elements_; }
-		//unique_ptr<shared_ptr<T>[]> getCapacite() { return capacite_; }
-		//void setElements(unique_ptr<shared_ptr<T>[]> nouveauElements) { elements_ = nouveauElements; }
-		//void setnElements(int nouveaunElements) { nElements_ = nouveaunElements; }
-		//void setCapacite(int nouvelleCapacite) { capacite_ = nouvelleCapacite; }
 		void setElement(shared_ptr<T> nouveauElement, int pos) { elements_[pos] = nouveauElement; }
 
 	private:

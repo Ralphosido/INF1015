@@ -1,4 +1,4 @@
-﻿#pragma region "Includes"//{
+#pragma region "Includes"//{
 #define _CRT_SECURE_NO_WARNINGS // On permet d'utiliser les fonctions de copies de chaînes qui sont considérées non sécuritaires.
 
 #include "td3.hpp"      // Structures de données pour la collection de films en mémoire.
@@ -205,9 +205,9 @@ void ListeFilms::detruire(bool possedeLesFilms)
 }
 
 
-void afficherActeur(const Acteur& acteur)
+ostream& afficherActeur(ostream& os, const Acteur& acteur)
 {
-	cout << "  " << acteur.nom << ", " << acteur.anneeNaissance << " " << acteur.sexe << endl;
+	return os << "  " << acteur.nom << ", " << acteur.anneeNaissance << " " << acteur.sexe << endl;
 }
 
 //TODO: Une fonction pour afficher un film avec tous ces acteurs (en utilisant la fonction afficherActeur ci-dessus).
@@ -228,16 +228,20 @@ Film*& ListeFilms::operator[](int position) {
 
 
 
-ostream& operator<<(ostream& o, const Film& film)
+ostream& operator <<(ostream& o, const Film& film)
 {
-	o << "Titre: " << film.titre << " " << "Réalisateur: " << film.realisateur << " Année: "
-		<< film.anneeSortie << " " << "Recette: " << film.recette << "M$" << "Acteurs: " << " ";
+	o << "Titre: " << film.titre << "\n " << "  Réalisateur: " << film.realisateur
+		<< "  Année :" << film.anneeSortie << "\n " << "  Recette: " << film.recette << "M$"
+		<< "\n " << "Acteurs:" << "\n ";
+
 	for (auto&& acteur : film.acteurs.enSpan())
 	{
-		afficherActeur(*acteur);
+		afficherActeur(o, *acteur);
 	}
-
+	return o;
 };
+
+
 
 /*void afficherFilm(const Film& film)
 {
@@ -252,16 +256,16 @@ ostream& operator<<(ostream& o, const Film& film)
 	}
 }}*/
 
-/*void afficherListeFilms(const ListeFilms& listeFilms)
+void afficherListeFilms(const ListeFilms& listeFilms)
 {
 	static const string ligneDeSeparation = "=========================================";
 	cout << ligneDeSeparation << endl;
 
 	for (const Film* film : listeFilms.enSpan()) {
-		afficherFilm(*film);
+		cout << *film;
 		cout << ligneDeSeparation;
 	}
-}*/
+}
 
 
 /*void afficherFilmographieActeur(const ListeFilms& listeFilms, const string& nomActeur)
@@ -296,7 +300,7 @@ int main()
 	cout << ligneDeSeparation << "Le premier film de la liste est:" << endl;
 	//TODO: Afficher le premier film de la liste.  Devrait être Alien.
 
-	afficherFilm(*listeFilms.enSpan()[0]);
+	cout << *listeFilms.enSpan()[0];
 
 	cout << ligneDeSeparation << "Les films sont:" << endl;
 	//TODO: Afficher la liste des films.  Il devrait y en avoir 7.
@@ -312,6 +316,27 @@ int main()
 	//TODO: Afficher la liste des films où Benedict Cumberbatch joue.  Il devrait y avoir Le Hobbit et Le jeu de l'imitation.
 
 	//afficherFilmographieActeur(listeFilms, "Benedict Cumberbatch");
+	//Chapitre 7-8
+	cout << ligneDeSeparation;
+	cout << "Chapitre 7-8" << endl << endl;
+	Film skylien = *listeFilms[0];
+	skylien.titre = "Skylien";
+	cout << "changement de titre" << endl << endl;
+	skylien.acteurs.enSpan()[0] = listeFilms[1]->acteurs.enSpan()[0];
+	cout << "changement acteur" << endl << endl;
+	skylien.acteurs.enSpan()[0]->nom = "Daniel Wroughton Craig";
+	cout << "changement du nom acteur" << endl << endl << ligneDeSeparation << endl << endl;
+	cout << "Afficher les 3 films:" << endl << endl;
+	cout << skylien << endl << endl << *listeFilms[0] << endl << endl << *listeFilms[1] << endl << endl;
+	cout << "fin chapitre 7-8" << endl << endl;
+
+	//Chapitre 10
+	cout << ligneDeSeparation << "Chapitre 10" << endl << endl;
+	cout << endl << "Le film à 955 M est :" << endl << *listeFilms.chercherFilm(critereInt, 955) << endl << "fin chapitre 10" << ligneDeSeparation;
+
+
+
+
 
 	//TODO: Détruire et enlever le premier film de la liste (Alien).  Ceci devrait "automatiquement" (par ce que font vos fonctions) détruire les acteurs Tom Skerritt et John Hurt, mais pas Sigourney Weaver puisqu'elle joue aussi dans Avatar.
 

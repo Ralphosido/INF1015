@@ -233,6 +233,20 @@ void afficherActeur(const Acteur& acteur)
 
 
 
+
+
+
+Film*& ListeFilms::operator[](int position) {
+
+	if (position > size() || position < 0) {
+		cout << "L'index est hors de portée" << endl;
+		position = 0; //retourner l'élément initial
+	}
+	return enSpan()[position];
+}
+
+
+
 ostream& operator<<(ostream& o, const Film& film)
 {
 	o << "Titre: " << film.titre << " " << "Réalisateur: " << film.realisateur << " Année: "

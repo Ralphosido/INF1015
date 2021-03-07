@@ -5,6 +5,7 @@
 #include <memory>
 #include "gsl/span"
 #include <functional>
+#include <iostream>
 using gsl::span;
 using namespace std;
 
@@ -46,29 +47,18 @@ private:
 	Film** elements_ = nullptr; // Pointeur vers un tableau de Film*, chaque Film* pointant vers un Film.
 };
 
-	template <typename T>
-	class Liste {
-	public:
-		Liste() = default;
-		Liste(int nElements) {
-			nElements_ = capacite_ = nElements;
-			elements_ = make_unique<shared_ptr<T>[]>(nElements_);
-		}
-		Liste& operator=(const Liste& autre) {
+template <typename T>
+class Liste {
+public:
+	Liste() = default;
+	Liste(int nElements) {
+		nElements_ = capacite_ = nElements;
+		elements_ = make_unique<shared_ptr<T>[]>(nElements_);
+	}
+	Liste& operator=(const Liste& autre) {
 
-			if (this != &autre)
-			{
-				elements_ = make_unique<shared_ptr<T>[]>(autre.capacite_);
-				for (int i = 0; i < autre.nElements_; ++i)
-				{
-					elements_[i] = autre.elements_[i];
-				}
-				capacite_ = autre.capacite_;
-				nElements_ = autre.nElements_;
-			}
-			return *this;
-		}
-		Liste(const Liste& autre) {
+		if (this != &autre)
+		{
 			elements_ = make_unique<shared_ptr<T>[]>(autre.capacite_);
 			for (int i = 0; i < autre.nElements_; ++i)
 			{
@@ -77,10 +67,23 @@ private:
 			capacite_ = autre.capacite_;
 			nElements_ = autre.nElements_;
 		}
-		span<shared_ptr<T>> enSpan() const {
-			auto elements = elements_.get();
-			return span(elements, nElements_);
+		return *this;
+	}
+	Liste(const Liste& autre) {
+		elements_ = make_unique<shared_ptr<T>[]>(autre.capacite_);
+		for (int i = 0; i < autre.nElements_; ++i)
+		{
+			elements_[i] = autre.elements_[i];
 		}
+<<<<<<< HEAD
+		capacite_ = autre.capacite_;
+		nElements_ = autre.nElements_;
+	}
+	span<shared_ptr<T>> enSpan() const {
+		auto elements = elements_.get();
+		return span(elements, nElements_);
+	}
+=======
 		
 		unique_ptr<shared_ptr<T>[]> getElements() { return elements_; }
 		void setElement(shared_ptr<T> nouveauElement, int pos) { elements_[pos] = nouveauElement; }
@@ -91,53 +94,64 @@ private:
 		//unique_ptr<Acteur*[]> elements_;
 		unique_ptr<shared_ptr<T>[]> elements_; // Pointeur vers un tableau de Acteur*, chaque Acteur* pointant vers un Acteur.
 	};
+>>>>>>> 3b0612491190aafe7ddba680088531a5c2d8353a
 
-	using ListeActeurs = Liste<Acteur>;
+	unique_ptr<shared_ptr<T>[]> getElements() { return elements_; }
+	void setElement(shared_ptr<T> nouveauElement, int pos) { elements_[pos] = nouveauElement; }
 
-	struct Film
+private:
+	int capacite_ = 0, nElements_ = 0;
+	//Acteur** elements_;
+	//unique_ptr<Acteur*[]> elements_;
+	unique_ptr<shared_ptr<T>[]> elements_; // Pointeur vers un tableau de Acteur*, chaque Acteur* pointant vers un Acteur.
+};
+
+using ListeActeurs = Liste<Acteur>;
+
+struct Film
+{
+	string titre = "", realisateur = ""; // Titre et nom du réalisateur (on suppose qu'il n'y a qu'un réalisateur).
+	int anneeSortie = 0, recette = 0; // Année de sortie et recette globale du film en millions de dollars
+	ListeActeurs acteurs;
+
+	Film& operator=(const Film& autre)
 	{
-		string titre = "", realisateur = ""; // Titre et nom du réalisateur (on suppose qu'il n'y a qu'un réalisateur).
-		int anneeSortie = 0, recette = 0; // Année de sortie et recette globale du film en millions de dollars
-		ListeActeurs acteurs;
-
-		Film& operator=(const Film& autre)
+		if (this != &autre)
 		{
-			if (this != &autre)
-			{
-				titre = autre.titre;
-				realisateur = autre.realisateur;
-				anneeSortie = autre.anneeSortie;
-				recette = autre.recette;
-				acteurs = autre.acteurs;
-			}
-			return *this;
+			titre = autre.titre;
+			realisateur = autre.realisateur;
+			anneeSortie = autre.anneeSortie;
+			recette = autre.recette;
+			acteurs = autre.acteurs;
 		}
-		Film(const Film& autre) : titre(" "), realisateur(" "), anneeSortie(0), recette(0) {
-			*this = autre;
-		}
-		Film() = default;
+		return *this;
+	}
+	Film(const Film& autre) : titre(" "), realisateur(" "), anneeSortie(0), recette(0) {
+		*this = autre;
+	}
+	Film() = default;
 
-		friend ostream& operator <<(ostream& o, const Film& film);
-	};
-
-
-	struct Acteur
-	{
-		string nom = ""; int anneeNaissance = 0; char sexe = 'N';
-		//ListeFilms joueDans;
-	};
+	friend ostream& operator <<(ostream& o, const Film& film);
+};
 
 
-	function<bool(Film*, int)> critereInt = [&](Film* ptrFilm, int condition) {
-		bool filmCorrespond = false;
-		if (ptrFilm->recette == condition or ptrFilm->anneeSortie == condition)
-			filmCorrespond = true;
-		return filmCorrespond;
-	};
+struct Acteur
+{
+	string nom = ""; int anneeNaissance = 0; char sexe = 'N';
+	//ListeFilms joueDans;
+};
 
-	function<bool(Film*, string)> criterestring = [&](Film* ptrfilm, string condition) {
-		bool filmcorrespond = false;
-		if (ptrfilm->titre == condition or ptrfilm->realisateur == condition)
-			filmcorrespond = true;
-		return filmcorrespond;
-	};
+
+function<bool(Film*, int)> critereInt = [&](Film* ptrFilm, int condition) {
+	bool filmCorrespond = false;
+	if (ptrFilm->recette == condition or ptrFilm->anneeSortie == condition)
+		filmCorrespond = true;
+	return filmCorrespond;
+};
+
+function<bool(Film*, string)> criterestring = [&](Film* ptrfilm, string condition) {
+	bool filmcorrespond = false;
+	if (ptrfilm->titre == condition or ptrfilm->realisateur == condition)
+		filmcorrespond = true;
+	return filmcorrespond;
+};
